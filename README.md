@@ -11,8 +11,8 @@ You can download the full dataset from [Zenodo](https://zenodo.org/record/235006
 
 # Output
 ## Measurement Files:
-- root/yyyy-mm-dd_hh-mm-ss_IndividualMeasurements.csv:
-Contains individual length measurements of structures (i. e. somaoutgrowths)
+- root/yyyy-mm-dd_hh-mm-ss_IndividualMeasurements.csv://
+...Contains individual length measurements of structures (i. e. somaoutgrowths)
 - root/yyyy-mm-dd_hh-mm-ss_SummaryMeasurements.csv:
 Contains mesaruements corresponding to individual neurons (i. e. sharp-bend counts)
 - root/yyyy-mm-dd_hh-mm-ss_Parameters.txt:
