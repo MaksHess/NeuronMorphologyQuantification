@@ -18,7 +18,7 @@ You can download the full dataset from [Zenodo](https://zenodo.org/record/235006
 - root/yyyy-mm-dd_hh-mm-ss_Parameters.txt:\
   Contains a copy of the parameters used
 ## Visualisations
-- root/classifiedtrees/\
+- root/(ALM|PLM)/classifiedtrees/\
   This folder contains .swc files with classified nodes.
-- root/wavytrees/\
+- root/(ALM|PLM)/wavytrees/\
   This folder contains .swc files with sharp bends and beads visualised.
