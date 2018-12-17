@@ -6,8 +6,8 @@ You can download the full dataset from [Zenodo](https://zenodo.org/record/235006
 
 # Instructions
 1. Clone the repository and download the full data from [Zenodo](https://zenodo.org/record/2350066#.XBd7YWhKiUk)
-2. In batchProcessing.py set the parameter root to the directory containing the data
-3. Run the script batchProcessing.py
+2. In *batchProcessing.py* set the parameter **root** to the directory containing the data
+3. Run the script *batchProcessing.py*
 
 # Output
 ## Measurement Files:
