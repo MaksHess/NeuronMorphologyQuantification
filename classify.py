@@ -3,9 +3,9 @@
 import utility
 import numpy as np
 import itertools
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 #from scipy.stats import linregress #as linregress
-import os
+#import os
 
 def traceBranch(endpoint, tree, main_nodes=[], soma_nodes=[], scale=(1,1,1)):
     '''Trace from an endpoint to a root node or any other node specified in main_branch  or soma_nodes.'''

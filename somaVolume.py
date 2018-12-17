@@ -115,7 +115,7 @@ def somavolume(filename_swc_or_tree='data/trees/alm.swc',
         seeds = getSomaPositionSingleSeed(filename_swc_or_tree)
     else:
         seeds = getSomaPosition(filename_swc_or_tree)
-    print(seeds)
+    #print(seeds)
     #seed = (33,77,13)
     volume = calculateSomaVolume(filename_tif, 
                                  seeds, 

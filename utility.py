@@ -266,10 +266,10 @@ def findWindow(node, branch, window_size=4, scale=(1,1,1)):
         try:
             next_parent_node = next_parent_node.tolist()
         except AttributeError:
-            print('not enough parent nodes!')
+            #print('not enough parent nodes!')
             break
         if not isinstance(next_parent_node, list):
-            print('not enough parent nodes!')
+            #print('not enough parent nodes!')
             break
         parent_distance += dist3D(current_parent_node, next_parent_node, scale=scale)
         current_parent_node = next_parent_node
@@ -311,14 +311,17 @@ def saveTree(filename, tree):
                 f.write(line + '\n')
     
 
-def vectorAngle3D(a, b, scale=(1,1,1), angle_in_radians=False):
+def vectorAngle3D(a_in, b_in, scale=(1,1,1), angle_in_radians=False):
     '''Calculate and return the angle between two vectors (a [x1, y1, z1,] and b [x2, y2, z2]).'''
     scale = np.array(scale)
-    a = a*scale
-    b = b*scale
+    a = a_in*scale
+    b = b_in*scale
     a_norm = np.linalg.norm(a)
     b_norm = np.linalg.norm(b)
     cosine_angle = np.dot(a, b) / (a_norm * b_norm)
+    if cosine_angle > 1 or cosine_angle < -1: #Catch a numerical error that leads to cosine_angle > 1 and subsequent miscalculation of angle
+        if abs(round(cosine_angle)-cosine_angle) < 1e-15:
+            cosine_angle = round(cosine_angle)
     angle = np.arccos(cosine_angle)
     if angle_in_radians:
         return angle

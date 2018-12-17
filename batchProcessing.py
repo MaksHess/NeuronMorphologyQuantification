@@ -1,8 +1,8 @@
 import cleanup
 import classify
 import wavyness
-import soma_volume
-import kink_positions
+import somaVolume
+import kinkPositions
 import beads
 import os
 import time
@@ -25,8 +25,8 @@ plm_outgrowth_suppression = 5.0 #um length of plm mainbranch at the end that is 
 neurontypes = ['ALM', 'PLM'] #list containing 'ALM', 'PLM' or both
 soma_volume_singleseed = True
 visualize_somavolumes = False
-root = 'E:/debug_data/'
-infolder = 'traces_manually/'
+root = 'E:/NeuronMorphologyQuantificationData/'
+infolder = 'trees/'
 infolder_tif = 'images/'
 
 
@@ -136,7 +136,7 @@ for neurontype in neurontypes:
                           fix_node=False,
                           plot_cdf=False)
         
-        kink_positions, outgrowth_positions = kink_positions.kinkPositions(fully_annotated_mainbranch, scale=scale)
+        kink_positions, outgrowth_positions = kinkPositions.kinkPositions(fully_annotated_mainbranch, scale=scale)
         kink_positions_string = '-'.join([str(pos) for pos in kink_positions])
         outgrowth_positions_string = '-'.join([str(pos) for pos in outgrowth_positions])
         
@@ -149,7 +149,7 @@ for neurontype in neurontypes:
 
         #if False:
         if neurontype=='ALM':
-            soma_volume = soma_volume.somavolume(classified_tree,
+            soma_volume = somaVolume.somavolume(classified_tree,
                                                 filename_tif=n_infolder_tif+file_tif,
                                                 scale=scale,
                                                 visualize=visualize_somavolumes,
@@ -199,7 +199,7 @@ for neurontype in neurontypes:
         utility.saveSWC(n_outfolder_classifiedtrees+file, classified_tree)
         utility.saveSWC(n_outfolder_wavytrees+file, wavytree_swc)
         utility.saveSWC(n_outfolder_wavytrees+file[:-4]+'_beads.swc', mainbranch_bead)
-        print('\n{}:\nBead count: {}\nKink count: {}\n\n'.format(file, int(bead_count), kinks_count))
+        #print('\n{}:\nBead count: {}\nKink count: {}\n\n'.format(file, int(bead_count), kinks_count))
                 
 MessageBeep()
 end = time.time()

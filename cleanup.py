@@ -1,10 +1,8 @@
 '''Load a APP2 traced .swc file and clean it up, save a cleaned .swc file.'''
 import utility
 import numpy as np
-import itertools
 import matplotlib.pyplot as plt
 from scipy.stats import linregress as linregress
-import os
 from classify import traceBranch
 np.set_printoptions(precision=2, suppress=True)
 
@@ -13,27 +11,56 @@ def interpolateNodes(start, end, idx, radius=None, scale=(1,1,1)):
     nodes = np.zeros((int(distance_in_pixels), 7))
     nodes[:,0] = np.arange(idx+1, idx+1+len(nodes))
     nodes[:,6] = nodes[:,0] - 1
-    try:
-        nodes[:,2] = np.arange(start[2], end[2], (end[2]-start[2])/len(nodes))
-    except ValueError:
+    if len(nodes) > 0:
+        try:
+            nodes[:,2] = np.arange(start[2], end[2], (end[2]-start[2])/len(nodes))
+        except ValueError:
+            nodes[:,2] = start[2]
+        try:
+            nodes[:,3] = np.arange(start[3], end[3], (end[3]-start[3])/len(nodes))
+        except ValueError:
+            nodes[:,3] = start[3]
+        try:
+            nodes[:,4] = np.arange(start[4], end[4], (end[4]-start[4])/len(nodes))
+        except ValueError:
+            nodes[:,4] = start[4]
+        nodes[:,1] = start[1]
+        if radius:
+            nodes[:,5] = radius
+        else:
+            try:
+                nodes[:,5] = np.arange(start[5], end[5], (end[5]-start[5])/len(nodes))
+            except ValueError:
+                nodes[:,5] = start[5]
+        #nodes[:,5] = np.arange(start[5], end[5], abs(start[5]-end[5])/len(nodes))
+    return nodes
+
+def interpolateNodes2(start, end, idx, radius=None, scale=(1,1,1)):
+    distance_in_pixels = utility.dist3D(start, end)
+    nodes = np.zeros((int(distance_in_pixels), 7))
+    nodes[:,0] = np.arange(idx+1, idx+1+len(nodes))
+    nodes[:,6] = nodes[:,0] - 1
+    if end[2]-start[2]!=0:
+        nodes[:,2] = np.linspace(start[2], end[2], len(nodes))
+    else:
         nodes[:,2] = start[2]
-    try:
-        nodes[:,3] = np.arange(start[3], end[3], (end[3]-start[3])/len(nodes))
-    except ValueError:
+    if end[3]-start[3]!=0:
+        nodes[:,3] = np.linspace(start[3], end[3], len(nodes))
+    else:
         nodes[:,3] = start[3]
-    try:
-        nodes[:,4] = np.arange(start[4], end[4], (end[4]-start[4])/len(nodes))
-    except ValueError:
+    if end[4]-start[4]!=0:
+        nodes[:,4] = np.linspace(start[4], end[4], len(nodes))
+    else:
         nodes[:,4] = start[4]
     nodes[:,1] = start[1]
     if radius:
         nodes[:,5] = radius
     else:
-        try:
-            nodes[:,5] = np.arange(start[5], end[5], (end[5]-start[5])/len(nodes))
-        except ValueError:
+        if end[5]-start[5]!=0:
+            nodes[:,5] = np.linspace(start[5], end[5], len(nodes))
+        else:
             nodes[:,5] = start[5]
-    #nodes[:,5] = np.arange(start[5], end[5], abs(start[5]-end[5])/len(nodes))
+        #nodes[:,5] = np.arange(start[5], end[5], abs(start[5]-end[5])/len(nodes))
     return nodes
 
 def cleanup(tree,
@@ -136,7 +163,7 @@ def cleanup(tree,
                 
             connection_node = window[distances.argmin()]
             
-            nodes = interpolateNodes(connection_node, new_side_branch[0], idx, radius)
+            nodes = interpolateNodes2(connection_node, new_side_branch[0], idx, radius)
             idx = np.max(nodes[:, 0])+1
             new_side_branch[0][6] = nodes[-1][0]
             nodes[0][6] = connection_node[0]
