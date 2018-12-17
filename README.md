@@ -11,14 +11,14 @@ You can download the full dataset from [Zenodo](https://zenodo.org/record/235006
 
 # Output
 ## Measurement Files:
-- root/yyyy-mm-dd_hh-mm-ss_IndividualMeasurements.csv://
-...Contains individual length measurements of structures (i. e. somaoutgrowths)
-- root/yyyy-mm-dd_hh-mm-ss_SummaryMeasurements.csv:
-Contains mesaruements corresponding to individual neurons (i. e. sharp-bend counts)
-- root/yyyy-mm-dd_hh-mm-ss_Parameters.txt:
-Contains a copy of the parameters used
+- root/yyyy-mm-dd_hh-mm-ss_IndividualMeasurements.csv:\
+  Contains individual length measurements of structures (i. e. somaoutgrowths)
+- root/yyyy-mm-dd_hh-mm-ss_SummaryMeasurements.csv:\
+  Contains mesaruements corresponding to individual neurons (i. e. sharp-bend counts)
+- root/yyyy-mm-dd_hh-mm-ss_Parameters.txt:\
+  Contains a copy of the parameters used
 ## Visualisations
-- root/classifiedtrees/
-This folder contains .swc files with classified nodes.
-- root/wavytrees/
-This folder contains .swc files with sharp bends and beads visualised.
+- root/classifiedtrees/\
+  This folder contains .swc files with classified nodes.
+- root/wavytrees/\
+  This folder contains .swc files with sharp bends and beads visualised.
