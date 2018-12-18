@@ -1,4 +1,10 @@
-'''Load a APP2 traced .swc file and clean it up, save a cleaned .swc file.'''
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+'''
+Copyright (c) 2017-2018 Max Hess, Alvaro Gomariz, ETH Zurich
+Load a APP2 traced .swc file and clean it up, save a cleaned .swc file.
+'''
+
 import utility
 import numpy as np
 import matplotlib.pyplot as plt

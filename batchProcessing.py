@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""Copyright (c) 2017-2018 Max Hess, Alvaro Gomariz, ETH Zurich"""
+
 import cleanup
 import classify
 import wavyness
@@ -17,8 +21,8 @@ start = time.time()
 #Parameters
 cleanup_tree = True
 scale = (0.223, 0.223, 0.3) #um
-length_threshold = 3 #um
-angle_threshold = 145 #degree
+length_threshold = 3.0 #um
+angle_threshold = 155 #degree
 window_size_linear_regression = 6.0 #um
 window_size_maximum_supression = 5.0 #um
 plm_outgrowth_suppression = 5.0 #um length of plm mainbranch at the end that is suppressed for outgrowth as the neuron tracing algorithm often makes mistakes at the end
@@ -133,7 +137,7 @@ for neurontype in neurontypes:
                           window_size_maximum_supression=window_size_maximum_supression,
                           n_colors=10,
                           scale=scale,
-                          fix_node=False,
+                          fix_node=True,
                           plot_cdf=False)
         
         kink_positions, outgrowth_positions = kinkPositions.kinkPositions(fully_annotated_mainbranch, scale=scale)

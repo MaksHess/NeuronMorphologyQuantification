@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+'''
+Copyright (c) 2017-2018 Max Hess, Alvaro Gomariz, ETH Zurich
+'''
+
+
 import numpy as np
 import utility
 import SimpleITK as sitk

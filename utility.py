@@ -1,4 +1,10 @@
-'''Some much used utility functions'''
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+'''
+Copyright (c) 2017-2018 Max Hess, Alvaro Gomariz, ETH Zurich
+Some much used utility functions.
+'''
+
 import os
 import numpy as np
 
