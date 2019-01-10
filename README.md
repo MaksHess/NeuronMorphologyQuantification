@@ -17,7 +17,7 @@ You can download the full dataset from [Zenodo](https://zenodo.org/record/235006
   Contains mesaruements corresponding to individual neurons (i. e. sharp-bend counts)
 - root/yyyy-mm-dd_hh-mm-ss_Parameters.txt:\
   Contains a copy of the parameters used
-## Visualisations
+## Visualizations
 - root/(ALM|PLM)/classifiedtrees/\
   This folder contains .swc files with classified nodes.
 - root/(ALM|PLM)/wavytrees/\
