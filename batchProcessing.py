@@ -12,11 +12,13 @@ import os
 import time
 import csv
 from tqdm import tqdm
-from winsound import MessageBeep
 import utility
 #np.set_printoptions(precision=2, suppress=True)
 
 start = time.time()
+
+#User input
+root = '../NeuronMorphologyQuantificationData/'
 
 #Parameters
 cleanup_tree = True
@@ -29,7 +31,6 @@ plm_outgrowth_suppression = 5.0 #um length of plm mainbranch at the end that is 
 neurontypes = ['ALM', 'PLM'] #list containing 'ALM', 'PLM' or both
 soma_volume_singleseed = True
 visualize_somavolumes = False
-root = 'E:/NeuronMorphologyQuantificationData/'
 infolder = 'trees/'
 infolder_tif = 'images/'
 
@@ -205,7 +206,6 @@ for neurontype in neurontypes:
         utility.saveSWC(n_outfolder_wavytrees+file[:-4]+'_beads.swc', mainbranch_bead)
         #print('\n{}:\nBead count: {}\nKink count: {}\n\n'.format(file, int(bead_count), kinks_count))
                 
-MessageBeep()
 end = time.time()
 with open(root + parameters_filename, 'a') as f:
     lj = 30
