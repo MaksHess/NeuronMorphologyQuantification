@@ -57,7 +57,7 @@ visualization.
 | 3 | 0 | 4 | 3 | 0 | 2 | 2 |
 | 4 | 0 | 4 | 1 | 0 | 2 | 2 |
 
-![alt text](https://github.com/HessMax/NeuronMorphologyQuantification/swc_example.png)
+![](swc_example.png)
 
 We use *.swc* files in this work as *(1)* input trees (neuron tracing output with manual 
 annotations), to *(2)* visualize the results of our classification
