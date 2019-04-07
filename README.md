@@ -90,6 +90,6 @@ For the visualization of wavyness (*../wavytrees/COND_AGE_SERIES_NAME.swc*) the 
 of a node corresponts to the mapping of its angle (0-180 degrees) to an integer in the range 1-10 inclusive. The radii
 of nodes detected as sharp bends are set to 3.
 
-###Beads
+### Beads
 Visualization of beads (*../wavytrees/COND_AGE_SERIES_NAME_beads.swc*) is done by doubling
 the radius of the bead-nodes and setting their type to 1.
