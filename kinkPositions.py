@@ -9,6 +9,24 @@ import utility
 import numpy as np
 
 def kinkPositions(fully_annotated_mainbranch, scale=(0.22, 0.22, 0.3)):
+    """
+    Returns the positoins of kinks and outgrowth events along the mainbranch.
+
+    Parameters
+    ----------
+    fully_annotated_mainbranch : np.ndarray
+        Mainbranch with annotated kinks (encoded in the radius) and outgrowth events (encoded with type set to 2).
+    scale : tuple of floats
+        x, y and z scales of the images underlying the analysis.
+
+    Returns
+    -------
+    kink_positions : np.ndarray
+        Array with distances of kinks from distal end.
+    outgrowth_positions : np.ndarray
+        Array with distances of outgrowth events form distal end.
+    """
+
     n_kinks = np.sum(fully_annotated_mainbranch[:,5]>0.5)
     n_outgrowths = np.sum(fully_annotated_mainbranch[:,1]==2)
     kink_positions = np.zeros(n_kinks)

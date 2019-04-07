@@ -2,18 +2,40 @@
 # -*- coding: utf-8 -*-
 '''
 Copyright (c) 2017-2018 Max Hess, Alvaro Gomariz, ETH Zurich
-Classifie all the nodes in a neuron into mainbranch, neuriteoutgrowth, somanodes, somaoutgrowth, pmv and blobs
+Classifie all the nodes in a neuron into mainbranch, neuriteoutgrowth, somanodes, somaoutgrowth, pvm and blobs
 '''
 
 import utility
 import numpy as np
 import itertools
-#import matplotlib.pyplot as plt
-#from scipy.stats import linregress #as linregress
-#import os
 
-def traceBranch(endpoint, tree, main_nodes=[], soma_nodes=[], scale=(1,1,1)):
-    '''Trace from an endpoint to a root node or any other node specified in main_branch  or soma_nodes.'''
+
+def traceBranch(endpoint, tree, main_nodes=None, soma_nodes=None, scale=(1,1,1)):
+    """
+    Trace from an endpoint to a root node or any other node specified in main_branch  or soma_nodes.
+
+    Parameters
+    ----------
+    endpoint : int or np.ndarray
+        Index of endpoint or endpoint-node of the branch to be traced.
+    tree : np.ndarray
+        Tree on which to trace a branch.
+    main_nodes : list or None
+        List of nodes that are classified as mainbranch-nodes.
+    soma_nodes : list or None
+        List of nodes that are classified as soma-nodes.
+    scale : tuple of floats [um]
+         x, y and z scales of the images underlying the analysis.
+
+    Returns
+    -------
+    branch_array : np.ndarray
+        Tree containing only the traced branch.
+    length : float
+        Length of the traced branch.
+
+    """
+
     if isinstance(endpoint, (float, int)):
         endpoint_index = endpoint
     else:
@@ -24,6 +46,11 @@ def traceBranch(endpoint, tree, main_nodes=[], soma_nodes=[], scale=(1,1,1)):
         main_nodes = main_nodes.tolist()
     if isinstance(soma_nodes, np.ndarray):
         soma_nodes = soma_nodes.tolist()
+
+    if not main_nodes:
+        main_nodes=[]
+    if not soma_nodes:
+        soma_nodes=[]
  
     
     #any tracing eventually stops in a root_node
@@ -60,8 +87,42 @@ def classify(tree,
              plm_outgrowth_suppression=5,
              scale=(0.223, 0.223, 0.3),
              debug=False):
-    '''
-    '''
+    """
+    Classify all the nodes in a PLM or ALM neuron tree.
+
+    Parameters
+    ----------
+    tree : np.ndarray
+        Tree to be classified.
+    neurontype : {'ALM', 'PLM'}
+        Type of the neuron to be classified.
+    length_threshold : float [um]
+        Minimum length of an outgrowth event.
+    plm_outgrowth_suppression : float [um]
+        Length of segments at both ends of mainbranch where outgrowth detection is suppressed (as those regions contain a lot of tracing errors).
+    scale : tuple of floats
+        x, y and z scales of the images underlying the analysis.
+    debug : bool
+
+
+    Returns
+    -------
+    tree_lengths : list of floats
+        Lengths of the returned branches.
+    tree_classes : list of strings {'mainbranch', 'neuriteoutgrowth', 'somanodes', 'somaoutgrowth', 'pvm' or 'blobs'}
+        Classifications of the returned branches.
+    tree_mean_radii : list of floats
+        Mean radii of returned branches.
+    tree_max_radii : list of floats
+        Max radii of returned branches.
+    mainbranch : np.ndarray
+        Mainbranch of the tree.
+    annotated_mainbranch : np.ndarray
+        Mainbranch of the tree with outgrowth events annotated.
+    full_classified_tree_array : np.ndarray
+        Full tree with classified nodes.
+    """
+
 
     tree = utility.removeDoubleNodes(tree)
     endpoints = utility.findEndpoints(tree)
@@ -130,24 +191,24 @@ def classify(tree,
     
     
     
-    #Find PMV branch in PLM neurons
+    #Find PVM branch in PLM neurons
     if neurontype=='PLM':
-        pmv_nodes = []
+        pvm_nodes = []
         for i in range(len(side_trees_array)):
             maximum = side_trees_array[i][:,5].max() 
             mean = side_trees_array[i][:,5].mean()
             length = utility.calculateDistancesTree(side_trees_array[i], scale=scale)
             string = '{0:.3f}   {1:.3f}   {2:.3f}'.format(maximum, mean, length)
             if (maximum > 5 and length > 12) or np.any(side_trees_array[i][:, 1]==2):
-                pmv_node = utility.findRoots(side_trees_array[i], return_node=True)[0]
+                pvm_node = utility.findRoots(side_trees_array[i], return_node=True)[0]
         try:
-            pmv_nodes.extend(utility.findWindow(pmv_node, mainbranch, window_size=10, scale=scale).tolist())
+            pvm_nodes.extend(utility.findWindow(pvm_node, mainbranch, window_size=10, scale=scale).tolist())
         except NameError:
             pass
     else:
-        pmv_nodes = []
+        pvm_nodes = []
     
-    #classify the side_trees according to their final node (pmv_nodes -> pmv-branch, soma_nodes -> soma-outgrowth, main_nodes -> neurite-outgrowth)
+    #classify the side_trees according to their final node (pvm_nodes -> pvm-branch, soma_nodes -> soma-outgrowth, main_nodes -> neurite-outgrowth)
     annotated_mainbranch = mainbranch.copy()
     annotated_mainbranch[:,1] = 0
     annotated_mainbranch[:,5] = 1
@@ -158,7 +219,6 @@ def classify(tree,
     tree_classes = []
     tree_mean_radii = []
     tree_max_radii = []
-    tree_orders = []
     side_trees_clean = []
     
     for i in range(len(side_trees_array)):
@@ -173,10 +233,10 @@ def classify(tree,
             tree_mean_radii.append(tree_mean_radius)
             tree_max_radii.append(tree_max_radius)
             
-            if root in pmv_nodes:
+            if root in pvm_nodes:
                 side_trees_array[i][:,1] = 6
                 side_category[i] = 6
-                tree_classes.append('PMV')
+                tree_classes.append('PVM')
                 annotated_mainbranch[np.argwhere(annotated_mainbranch[:,0]==root[0])[0][0], 1] = 6
                     
             elif root in soma_nodes:
@@ -193,7 +253,7 @@ def classify(tree,
             elif root in  main_nodes and (np.any(side_trees_array[i][:, 1]==1) or np.any(side_trees_array[i][:, 1]==3)):
                 side_trees_array[i][:,1] = 7
                 side_category[i] = 7
-                tree_classes.append('PMV_Connection')
+                tree_classes.append('PVM_Connection')
                 annotated_mainbranch[np.argwhere(annotated_mainbranch[:,0]==root[0])[0][0], 1] = 7
             
             elif root in main_nodes and ((side_trees_array[i][:,5].mean() > 2 and tree_length < 5) or side_trees_array[i][:,5].mean() > 3) or (np.any(side_trees_array[i][:, 1]==5)):

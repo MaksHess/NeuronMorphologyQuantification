@@ -8,10 +8,28 @@ import numpy as np
 import utility
 import matplotlib.pyplot as plt
 from scipy import interpolate
-import os
-import csv
+
 
 def findWindow(node, branch, window_size=4, scale=(0.22, 0.22, 0.3)):
+    """
+    Given a `node` on a `branch`, return a window of size `window_size` [um].
+
+    Parameters
+    ----------
+    node : np.ndarray
+        Node around which to return a window.
+    branch : np.ndarray
+        Parent branch of `node`.
+    window_size : float [um]
+        Maximum distance of the returned window along the branch.
+    scale : tuple of floats
+        x, y and z scales of the images underlying the analysis.
+
+    Returns
+    -------
+    window_nodes : np.ndarray
+        Array of nodes belonging to the window.
+    """
     if isinstance(node, np.ndarray):
         node = node.tolist()
         node[1] = 2
@@ -51,8 +69,32 @@ def findWindow(node, branch, window_size=4, scale=(0.22, 0.22, 0.3)):
         else:
             raise NameError('NoWindowFound')
     return np.array(window_nodes)
-    
-def calculateAnglesWithLinearRegression(node, branch, window_size=3.2, scale=(0.22, 0.22, 0.3), visualize=True, fixed_node=False):
+
+
+def calculateAnglesWithLinearRegression(node, branch, window_size=3.2, scale=(0.22, 0.22, 0.3), visualize=True,
+                                        fixed_node=False):
+    """
+
+    Parameters
+    ----------
+    node : np.ndarray
+        Node for which to calculate the angle.
+    branch : np.ndarray
+        Parent branch of `node`.
+    window_size : float [um]
+        Size of the window on which to do the linear regression.
+    scale : tuple of floats
+        x, y and z scales of the images underlying the analysis.
+    visualize : bool
+        Visualization of linear regressoin (for debugging).
+    fixed_node : bool
+        Whether the linear regression needs to go through `node`.
+
+    Returns
+    -------
+    angle : float
+        Local angle of `node`.
+    """
     if isinstance(node, np.ndarray):
         node = node.tolist()
     parent_distance = 0
@@ -169,7 +211,7 @@ def calculateAnglesWithLinearRegression(node, branch, window_size=3.2, scale=(0.
         return angle
         
 
-def wavyness(infilename_or_mainbranch,
+def wavyness(mainbranch,
              angle_threshold=145,
              window_size_linear_regression=4.0,
              window_size_maximum_supression=4.0,
@@ -177,6 +219,39 @@ def wavyness(infilename_or_mainbranch,
              scale=(0.223,0.223,0.3),
              fix_node=False,
              plot_cdf=False):
+    """
+    Detects sharp bends along a branch.
+
+    Parameters
+    ----------
+    mainbranch : np.ndarray
+        Mainbranch along with to count the sharp bends (kinks).
+    angle_threshold : float or int
+        Threshold value for a node to be considered a sharp bend.
+    window_size_linear_regression : float [um]
+        Size of the window on which to perform linear regression for angle calculation.
+    window_size_maximum_supression : float [um]
+        Size of the window for non-maximum supression (preventing double counting of sharp bends).
+    n_colors : int
+        Number of colors for visualization of angles.
+    scale : tuple of floats
+        x, y and z scales of the images underlying the analysis.
+    fix_node : bool
+        If True, linear regressions need to go through the location of the node on which the angle is calculated.
+    plot_cdf : bool
+        Whether to plot the cdf of resulting angles (for debugging).
+
+    Returns
+    -------
+    kinks_count : int
+        Number of sharp bends (kinks) detected.
+    annotated_mainbranch : np.ndarray
+        Mainbranch with kinks and outgrowth events annotated.
+    kinks : np.ndarray
+        List of nodes that were detected as sharp bends.
+    tree : np.ndarray
+        Mainbranch with classification according to local angles (for visualization).
+    """
     
     if plot_cdf:
         fig, ax = plt.subplots(figsize=(8, 4))
@@ -186,10 +261,7 @@ def wavyness(infilename_or_mainbranch,
         ax.set_ylabel('Percentage')
         #ax.axis([50,cutoff_angle,0,1])    
     
-    if isinstance(infilename_or_mainbranch, str):
-        tree = utility.readSWC(infilename_or_mainbranch)
-    elif isinstance(infilename_or_mainbranch, (list, np.ndarray)):
-        tree = np.array(infilename_or_mainbranch)
+    tree = np.array(mainbranch)
     tree[:,5] = 0.5
     annotated_mainbranch=tree.copy()
     angles = np.zeros(len(tree))

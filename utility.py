@@ -5,7 +5,6 @@ Copyright (c) 2017-2018 Max Hess, Alvaro Gomariz, ETH Zurich
 Some much used utility functions.
 '''
 
-import os
 import numpy as np
 
 def dilate_array(array, n):

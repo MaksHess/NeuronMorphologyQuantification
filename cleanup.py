@@ -8,53 +8,44 @@ Load a APP2 traced .swc file and clean it up, save a cleaned .swc file.
 import utility
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.stats import linregress as linregress
 from classify import traceBranch
 np.set_printoptions(precision=2, suppress=True)
 
-def interpolateNodes(start, end, idx, radius=None, scale=(1,1,1)):
-    distance_in_pixels = utility.dist3D(start, end)
-    nodes = np.zeros((int(distance_in_pixels), 7))
-    nodes[:,0] = np.arange(idx+1, idx+1+len(nodes))
-    nodes[:,6] = nodes[:,0] - 1
-    if len(nodes) > 0:
-        try:
-            nodes[:,2] = np.arange(start[2], end[2], (end[2]-start[2])/len(nodes))
-        except ValueError:
-            nodes[:,2] = start[2]
-        try:
-            nodes[:,3] = np.arange(start[3], end[3], (end[3]-start[3])/len(nodes))
-        except ValueError:
-            nodes[:,3] = start[3]
-        try:
-            nodes[:,4] = np.arange(start[4], end[4], (end[4]-start[4])/len(nodes))
-        except ValueError:
-            nodes[:,4] = start[4]
-        nodes[:,1] = start[1]
-        if radius:
-            nodes[:,5] = radius
-        else:
-            try:
-                nodes[:,5] = np.arange(start[5], end[5], (end[5]-start[5])/len(nodes))
-            except ValueError:
-                nodes[:,5] = start[5]
-        #nodes[:,5] = np.arange(start[5], end[5], abs(start[5]-end[5])/len(nodes))
-    return nodes
 
-def interpolateNodes2(start, end, idx, radius=None, scale=(1,1,1)):
+def interpolateNodes(start, end, idx, radius=None):
+    """
+    Interpolate nodes between `start` and `end`.
+
+    Parameters
+    ----------
+    start : np.ndarray
+        Start node.
+    end : np.ndarray
+        End node.
+    idx : int
+        Lower bound to start index count for interpolated nodes.
+    radius : int or None
+        If int, constant radius for interpolated nodes, else radius is interpolated linearly.
+
+    Returns
+    -------
+    nodes : np.ndarray
+        Interpolated nodes.
+    """
+
     distance_in_pixels = utility.dist3D(start, end)
     nodes = np.zeros((int(distance_in_pixels), 7))
     nodes[:,0] = np.arange(idx+1, idx+1+len(nodes))
     nodes[:,6] = nodes[:,0] - 1
-    if end[2]-start[2]!=0:
+    if end[2]-start[2] != 0:
         nodes[:,2] = np.linspace(start[2], end[2], len(nodes))
     else:
         nodes[:,2] = start[2]
-    if end[3]-start[3]!=0:
+    if end[3]-start[3] != 0:
         nodes[:,3] = np.linspace(start[3], end[3], len(nodes))
     else:
         nodes[:,3] = start[3]
-    if end[4]-start[4]!=0:
+    if end[4]-start[4] != 0:
         nodes[:,4] = np.linspace(start[4], end[4], len(nodes))
     else:
         nodes[:,4] = start[4]
@@ -62,27 +53,45 @@ def interpolateNodes2(start, end, idx, radius=None, scale=(1,1,1)):
     if radius:
         nodes[:,5] = radius
     else:
-        if end[5]-start[5]!=0:
+        if end[5]-start[5] != 0:
             nodes[:,5] = np.linspace(start[5], end[5], len(nodes))
         else:
             nodes[:,5] = start[5]
-        #nodes[:,5] = np.arange(start[5], end[5], abs(start[5]-end[5])/len(nodes))
     return nodes
 
 def cleanup(tree,
             neurontype='PLM',
             scale=(0.223, 0.223, 0.3),
-            visualize=True):
+            visualize=False):
+    """
+    Cleanup tracing errors where outgrowth events move parallel along the mainbranch.
+
+    Parameters
+    ----------
+    tree : np.ndarray
+        Tree on wich to perfom cleanup.
+    neurontype : str {'ALM', 'PLM'}
+        Process ALM or PLM neurons.
+    scale :  tuple of floats
+        x, y and z scales of the images underlying the analysis.
+    visualize : bool
+        Wheter to visualize the results.
+
+    Returns
+    -------
+    full_clean_tree:
+        Clean tree.
+    """
     
     endpoints = utility.findEndpoints(tree)
     
-    #For ALM neurons detect the soma_nodes i.e. all nodes connected to the root that have radius above a threshold
+    # For ALM neurons detect the soma_nodes i.e. all nodes connected to the root that have radius above a threshold
     if neurontype=='ALM':
         soma_nodes = utility.findSomaNodes(tree, scale=scale)
     else:
         soma_nodes = []
     
-    #Trace from every endpoint to a root and save the corresponding branches, select the longest as mainbranch
+    # Trace from every endpoint to a root and save the corresponding branches, select the longest as mainbranch
     branches = []
     lengths = np.zeros(len(endpoints))
     for i in range(len(endpoints)):
@@ -93,7 +102,7 @@ def cleanup(tree,
     mainbranch_length = lengths.max()-mainbranch[-1][5]*scale[0] #the last node is part of the soma and its radius gets subtracted from the final length
     
     
-    #Trace from every endpoint to a node on the mainbranch to find sidebranches
+    # Trace from every endpoint to a node on the mainbranch to find sidebranches
     side_branches = []
     side_lengths = np.zeros(len(endpoints))
     for i in range(len(endpoints)):
@@ -102,7 +111,7 @@ def cleanup(tree,
         side_lengths[i] = length-branch[-1][5]*scale[0]
     
     
-    #check if sidebranches are close and parallel to mainbranch
+    # check if sidebranches are close and parallel to mainbranch
     if visualize:
         fig, axes = plt.subplots(3, 1, sharex='col')
     all_distances = []
@@ -135,14 +144,10 @@ def cleanup(tree,
             axes[1].plot(min_distance_from_mainbranch2)
             axes[2].plot(np.cumsum(min_distance_from_mainbranch2)/(np.arange(len(min_distance_from_mainbranch2))+1))
         all_distances.append(min_distance_from_mainbranch2)
-        
-        
-    
+
     if visualize:    
         plt.show()
-    
-    
-    
+
     start_node_index = np.zeros(len(all_distances))
     d_th = 0.25
     for i, distance in enumerate(all_distances):
@@ -169,7 +174,7 @@ def cleanup(tree,
                 
             connection_node = window[distances.argmin()]
             
-            nodes = interpolateNodes2(connection_node, new_side_branch[0], idx, radius)
+            nodes = interpolateNodes(connection_node, new_side_branch[0], idx, radius)
             idx = np.max(nodes[:, 0])+1
             new_side_branch[0][6] = nodes[-1][0]
             nodes[0][6] = connection_node[0]

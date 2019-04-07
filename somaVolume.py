@@ -17,14 +17,6 @@ import csv
 from PIL import Image
 from tqdm import trange
 
-def getSomaPosition(filename_swc_or_tree):
-    if isinstance(filename_swc_or_tree, str):
-        tree = utility.readSWC(filename_swc)
-    else:
-        tree = filename_swc_or_tree
-    roots = tree[np.where(tree[:,1]==0)]
-    seeds = roots[:,2:5].astype(int).tolist()
-    return seeds
 
 def getSomaPositionSingleSeed(filename_swc_or_tree):
     if isinstance(filename_swc_or_tree, str):
@@ -34,6 +26,7 @@ def getSomaPositionSingleSeed(filename_swc_or_tree):
     roots = tree[np.where(tree[:,6]==-1)]
     seeds = roots[:,2:5].astype(int).tolist()
     return seeds
+
 
 def calculateSomaVolume(filename_tif, 
                         seeds, 
@@ -111,19 +104,14 @@ def somavolume(filename_swc_or_tree='data/trees/alm.swc',
                scale=(0.223,0.223,0.3),
                visualize=True,
                outfolder_gif='data/trees/',
-               soma_volume_singleseed=True,
                numberOfIterations=2,
                multiplier=2.5,
                initialNeighborhoodRadius=3,
                replaceValue=1,
                vectorRadius=(3,3,3)):
-    
-    if soma_volume_singleseed:
-        seeds = getSomaPositionSingleSeed(filename_swc_or_tree)
-    else:
-        seeds = getSomaPosition(filename_swc_or_tree)
-    #print(seeds)
-    #seed = (33,77,13)
+
+    seeds = getSomaPositionSingleSeed(filename_swc_or_tree)
+
     volume = calculateSomaVolume(filename_tif, 
                                  seeds, 
                                  scale=scale, 
@@ -138,5 +126,5 @@ def somavolume(filename_swc_or_tree='data/trees/alm.swc',
     
     
 if __name__ == '__main__':
-    volume=somavolume()
+    volume = somavolume()
     print(volume)
