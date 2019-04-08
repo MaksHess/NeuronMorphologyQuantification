@@ -57,7 +57,7 @@ visualization.
 | 3 | 0 | 4 | 3 | 0 | 2 | 2 |
 | 4 | 0 | 4 | 1 | 0 | 2 | 2 |
 
-![](swc_example.png)
+![](images/swc_example.png)
 
 We use *.swc* files in this work as *(1)* input trees (neuron tracing output with manual 
 annotations), to *(2)* visualize the results of our classification
@@ -73,17 +73,17 @@ a **crossing PVM process** is not properly detected as such you can annotate it 
 ### Classification
 Classified neuron trees (*../classifiedtrees*) have the following naming convention:
 
-| Structure | Type |
-|-------|------|
-| Soma node | 0 |
-| Mainbranch | 1 |
-| Neurite outgrowth | 2 |
-| Soma outgrowth | 3 |
-| Blob | 5 |
-| PVM-crossing | 6 |
-| PVM-connection | 7 |
-| Unknown | 9 |
-| Silenced outgrowth | 10 |
+| Structure | Type | Description|
+|-------|------|--------|
+| Soma node | 0 | Beloning to soma. |
+| Mainbranch | 1 | Belonging to main branch. |
+| Neurite outgrowth | 2 | Belonging to process sprouting from main branch. |
+| Soma outgrowth | 3 | Belonging to process sprouting from soma node. |
+| Blob | 5 | Sharp bend in process that is not an outgrowth event. |
+| PVM-crossing | 6 | Process of PVM neuron that crosses the PLM neuron. |
+| PVM-connection | 7 | Regular connection(s) (1-2) to PVM neurons (no branching event). |
+| Unknown | 9 | None of the above. |
+| Silenced outgrowth | 10 | Outgrowth event in the first or last segment of the mainbranch, silenced as in those regions a lot of tracing errors occur.
 
 ### Wavyness
 For the visualization of wavyness (*../wavytrees/COND_AGE_SERIES_NAME.swc*) the radii of all nodes of the mainbranch are set to 0.5. The type
