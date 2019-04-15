@@ -1,18 +1,21 @@
 ##############################################################################
 #                                                                            #
-#    NeuronMorphologyQuantification                              					   #
+#    NeuronMorphologyQuantification                              			 #
 #                                                                            #
 ##############################################################################
 
-    Copyright 2018 Max Hess, <hess.max.timo@gmail.com>
-    D-HEST, ETH Zurich
+    Copyright 2018 Max Hess   @   ETH Zurich
 
-    If you use any part of this code in a publication, you must include a citation 
+    Ewald-Lab, D-HEST, ETH Zurich   (Prof. Dr. Collin Ewald @ http://www.ewaldlab.com)
+    Computer-assisted Applications in Medicine, D-ITET, ETH Zurich   (Prof. Dr. Orcun Goksel @ http://goksel.ch)
+
+
+    If you use any part of this code in a publication, you must include a citation
     to the paper below.
-    
-    In-vivo quantitative image analysis of age-related morphological changes of C. elegans neurons reveals a correlation 
+
+    In-vivo quantitative image analysis of age-related morphological changes of C. elegans neurons reveals a correlation
     between neurite bending and novel neurite outgrowths.
-    M. Hess et al.
+    M. Hess, A. Gomariz, O. Goksel, C. Ewald
         
     By installing, copying, or otherwise using this Software, you agree to be 
     bound by the terms of the license agreement.  This software, its modifications, 
@@ -31,4 +34,4 @@
     OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     
     YOU MUST NOT REMOVE THIS LICENSE FILE AND DISCLAIMER IN ANY CASE AND MUST
-    PASS ON WHENEVER YOU DISTRIBUTE THE SOFTWARE OR DERIVATIVE WORKS. 
+    PASS ON WHENEVER YOU DISTRIBUTE THE SOFTWARE OR DERIVATIVE WORKS.
