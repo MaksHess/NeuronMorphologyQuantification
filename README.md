@@ -33,7 +33,7 @@ Preprocessed images can be found in the 'images' folder. The 'trees' folders con
   * SimpleITK 1.2.0
   * tqdm 4.31.1
   
-*All these packages can be automatically installed with [pip](https://pip.pypa.io/en/stable/installing/) by running `pip install -r requirements.txt` on the code directory
+*All these packages can be automatically installed with [pip](https://pip.pypa.io/en/stable/installing/) by running `python -m pip install -r requirements.txt` on the code directory
 
 # Instructions
 1. Clone the repository and download the full data from [Zenodo](https://zenodo.org/record/2350066#.XBd7YWhKiUk)
