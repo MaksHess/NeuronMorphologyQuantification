@@ -24,7 +24,7 @@ NeuronMorphologyQuantificationData
 Preprocessed images can be found in the 'images' folder. The 'trees' folders contain neuron tracings from the APP2 algorithm with manual annotations.
 
 # Requirements
-- Python 3.6
+- [Python 3.6](https://www.python.org/downloads/)
 - The following python packages* 
   * numpy 1.16.2
   * matplotlib 3.0.3
