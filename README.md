@@ -1,5 +1,6 @@
 # NeuronMorphologyQuantification
 Code accompanying the manuscript "In-vivo quantitative image analysis of age-related morphological changes of C. elegans neurons reveals a correlation between neurite bending and novel neurite outgrowths" by Hess et al.
+https://doi.org/10.1523/ENEURO.0014-19.2019 
 
 # Data
 You can download the full dataset from [Zenodo](https://zenodo.org/record/2350066#.XBd7YWhKiUk).
